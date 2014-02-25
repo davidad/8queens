@@ -6,10 +6,6 @@ x64 assembler solution to n-queens problem. Not tested for `n` other than 8.
 ```
 $ git clone https://github.com/davidad/8queens.git
 Cloning into '8queens'...
-remote: Counting objects: 14, done.
-remote: Compressing objects: 100% (10/10), done.
-remote: Total 14 (delta 3), reused 14 (delta 3)
-Unpacking objects: 100% (14/14), done.
 $ cd 8queens
 $ make
 mkdir download
