@@ -13,7 +13,7 @@
   mov rdi, 1           ; stdout
   mov rcx, 0
   movq xmm8, rcx       ; bitmap of queens
-  movq mm0, rcx         ; horizontal position
+  movq mm0, rcx        ; horizontal position of printer
 %endif
 next_state:
   bsf rcx, r10             ; find next available position in current level
@@ -22,7 +22,6 @@ next_state:
 %ifdef WINPRINTER
   xor eax, eax
   bts eax, ecx
-  pslldq xmm8, 1       ; shift bitmap to the left
   pinsrb xmm8, eax, 0  ; insert mask for this queen
 %endif
   cmp rsp, r14             ; check if we've done 7 levels already
@@ -30,6 +29,9 @@ next_state:
   movq rax, xmm1           ; save current state ...
   push r10
   push rax                 ;   ... to stack
+%ifdef WINPRINTER
+  pslldq xmm8, 1       ; shift bitmap to the left
+%endif
   mov rax, r15             ; set up attack mask
   shl rax, cl              ; shift into position
   movq xmm2, rax

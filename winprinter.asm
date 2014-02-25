@@ -1,7 +1,10 @@
 section .data
+
 cursormove0:
 db `\n\n\n\n\n\n\n\n\n\n\e[10A`
+
 boardstart:
+
 ; board top
 db `\u2553`
 times 8 db `\u2500`
@@ -9,10 +12,11 @@ db `\u2556`
 
 %define evenrow `\e[1;31;47m \e[m\e[1;31;40m \e[m`
 %define oddrow  `\e[1;31;40m \e[m\e[1;31;47m \e[m`
-;%define rowend `\u2551\e[10D\e[1B`
 %define rowend `\e[1B\e[10D`
 
 db rowend
+
+%rep 4
 db `\u2551`
 times 4 db evenrow
 db `\u2551`
@@ -22,36 +26,7 @@ db `\u2551`
 times 4 db oddrow
 db `\u2551`
 db rowend
-
-db `\u2551`
-times 4 db evenrow
-db `\u2551`
-db rowend
-
-db `\u2551`
-times 4 db oddrow
-db `\u2551`
-db rowend
-
-db `\u2551`
-times 4 db evenrow
-db `\u2551`
-db rowend
-
-db `\u2551`
-times 4 db oddrow
-db `\u2551`
-db rowend
-
-db `\u2551`
-times 4 db evenrow
-db `\u2551`
-db rowend
-
-db `\u2551`
-times 4 db oddrow
-db `\u2551`
-db rowend
+%endrep
 
 boardbottom:
 db `\u2559`
