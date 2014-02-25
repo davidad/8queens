@@ -19,5 +19,5 @@ $
 ```
 
 Somewhat surprisingly, the very first time I tried to run this code, it successfully returned 92.
-(Thought it did take me about 3 hours of thinking and plenty of referencing the Intel 64 manual
+(Though it did take me about 3 hours of thinking and plenty of referencing the Intel 64 manual
 before I could write it at all.)
