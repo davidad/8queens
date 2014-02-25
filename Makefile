@@ -15,8 +15,8 @@ run: 8queens
 	ld -o $@ $^
 	@echo '==='
 
-ifeq ($(WINPRINTER), 1)
-  FLAGS += -DWINPRINTER
+ifeq ($(NOPRETTY), 1)
+  FLAGS += -DNOPRETTY
 endif
 
 -include *.dep
@@ -28,7 +28,7 @@ clean:
 	rm -f *.o 8queens
 
 distclean: clean
-	rm -rf download nasm
+	rm -rf download nasm *.dep
 
 #-------------------------------------------------------------------------------
 # Download NASM.

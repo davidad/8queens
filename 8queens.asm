@@ -9,7 +9,7 @@
   mov r14, rsp             ;   the entire solution space has been explored)
   sub r14, 2*8*7           ; this is where the stack pointer would be when we've
                            ;   completed a winning state
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   mov rdi, 1           ; stdout
   mov rcx, 0
   movq xmm8, rcx       ; bitmap of queens
@@ -19,7 +19,7 @@ next_state:
   bsf rcx, r10             ; find next available position in current level
   jz backtrack             ; if there is no available position, we must go back
   btc r10, rcx             ; mark position as unavailable
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   xor eax, eax
   bts eax, ecx
   pinsrb xmm8, eax, 0  ; insert mask for this queen
@@ -29,7 +29,7 @@ next_state:
   movq rax, xmm1           ; save current state ...
   push r10
   push rax                 ;   ... to stack
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   pslldq xmm8, 1       ; shift bitmap to the left
 %endif
   mov rax, r15             ; set up attack mask
@@ -54,20 +54,20 @@ backtrack:
   pop rcx                  ; restore last state
   pop r10
   movq xmm1, rcx
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   psrldq xmm8, 1       ; shift bitmap to the right
 %endif
   jmp next_state           ; try again
 
 win:
   inc r8                   ; increment solution counter
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   %include "winprinter.asm"
 %endif
   jmp next_state           ; keep going
 
 done:
-%ifdef WINPRINTER
+%ifndef NOPRETTY
   mov rax, SYSCALL_WRITE
   mov rsi, cursormove2
   mov rdx, boardend - cursormove2
