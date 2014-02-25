@@ -7,17 +7,16 @@ ifeq ($(UNAME),Linux)
 	FORMAT := elf64
 endif
 
-8queens: 8queens.o
-	ld -o $@ $^
-	@echo '==='
-	@echo 'to run, do `make run`'
-
-%.o: ./nasm %.asm
-	$^ -f $(FORMAT) -o $@
-
 .PHONY: run
 run: 8queens
 	./8queens; echo $$?
+
+8queens: 8queens.o
+	ld -o $@ $^
+	@echo '==='
+
+%.o: ./nasm %.asm
+	$^ -f $(FORMAT) -o $@
 
 .PHONY: distclean clean
 clean:
