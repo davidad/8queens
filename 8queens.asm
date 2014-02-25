@@ -11,7 +11,7 @@
                            ;   completed a winning state
 next_state:
   bsf rcx, rdx             ; find next available position in current level
-  jz backtrack             ; if there is no available position, we need to go back
+  jz backtrack             ; if there is no available position, we must go back
   btc rdx, rcx             ; mark position as unavailable
   cmp rsp, r14             ; check if we've done 7 levels already
   je win                   ; if so, we have a win state. otherwise continue
@@ -47,6 +47,6 @@ win:
   jmp next_state           ; keep going
 
 done:
-  mov rdi, r8
-  mov rax, SYSCALL_EXIT
-  syscall
+  mov rdi, r8              ; set system call argument to solution count
+  mov rax, SYSCALL_EXIT    ; set system call to exit
+  syscall                  ; this will exit with our solution count as status
