@@ -15,8 +15,13 @@ run: 8queens
 	ld -o $@ $^
 	@echo '==='
 
+ifeq ($(WINPRINTER), 1)
+  FLAGS += -DWINPRINTER
+endif
+
+-include *.dep
 %.o: ./nasm %.asm
-	$^ -f $(FORMAT) -o $@
+	./nasm $*.asm $(FLAGS) -f $(FORMAT) -o $@ -MD $*.dep
 
 .PHONY: distclean clean
 clean:

@@ -1,5 +1,5 @@
 %include "os_dependent_stuff.asm"
-  mov rdx, 0b11111111      ; all eight possibilities available
+  mov r10, 0b11111111      ; all eight possibilities available
   mov r8, 0x000000000000 ; no squares under attack from anywhere
   movq xmm1, r8            ; maintain this state in xmm1
   mov r15, 0x000100010001  ; attack mask for one queen (left, right, and center)
@@ -9,15 +9,27 @@
   mov r14, rsp             ;   the entire solution space has been explored)
   sub r14, 2*8*7           ; this is where the stack pointer would be when we've
                            ;   completed a winning state
+%ifdef WINPRINTER
+  mov rdi, 1           ; stdout
+  mov rcx, 0
+  movq xmm8, rcx       ; bitmap of queens
+  movq mm0, rcx         ; horizontal position
+%endif
 next_state:
-  bsf rcx, rdx             ; find next available position in current level
+  bsf rcx, r10             ; find next available position in current level
   jz backtrack             ; if there is no available position, we must go back
-  btc rdx, rcx             ; mark position as unavailable
+  btc r10, rcx             ; mark position as unavailable
+%ifdef WINPRINTER
+  xor eax, eax
+  bts eax, ecx
+  pslldq xmm8, 1       ; shift bitmap to the left
+  pinsrb xmm8, eax, 0  ; insert mask for this queen
+%endif
   cmp rsp, r14             ; check if we've done 7 levels already
   je win                   ; if so, we have a win state. otherwise continue
-  movq r10, xmm1           ; save current state ...
-  push rdx
-  push r10                 ;   ... to stack
+  movq rax, xmm1           ; save current state ...
+  push r10
+  push rax                 ;   ... to stack
   mov rax, r15             ; set up attack mask
   shl rax, cl              ; shift into position
   movq xmm2, rax
@@ -31,22 +43,34 @@ next_state:
   por xmm2, xmm3            ; collect bitwise ors in xmm2
   por xmm2, xmm1            
   vpandn xmm4, xmm2, xmm7   ; invert and select low byte
-  movq rdx, xmm4            ; place in rdx
+  movq r10, xmm4            ; place in r10
   jmp next_state           ; now we're set up to iterate
 
 backtrack:
   cmp rsp, r13             ; are we done?
   je done
-  pop r10                  ; restore last state
-  pop rdx
-  movq xmm1, r10
+  pop rcx                  ; restore last state
+  pop r10
+  movq xmm1, rcx
+%ifdef WINPRINTER
+  psrldq xmm8, 1       ; shift bitmap to the right
+%endif
   jmp next_state           ; try again
 
 win:
   inc r8                   ; increment solution counter
+%ifdef WINPRINTER
+  %include "winprinter.asm"
+%endif
   jmp next_state           ; keep going
 
 done:
-  mov rdi, r8              ; set system call argument to solution count
+%ifdef WINPRINTER
+  mov rax, SYSCALL_WRITE
+  mov rsi, cursormove2
+  mov rdx, boardend - cursormove2
+  syscall
+%endif
   mov rax, SYSCALL_EXIT    ; set system call to exit
+  mov rdi, r8              ; set system call argument to solution count
   syscall                  ; this will exit with our solution count as status
