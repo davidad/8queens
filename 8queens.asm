@@ -1,8 +1,4 @@
-default rel
-section .text
-global start
-start:
-_start:
+%include "os_dependent_stuff.asm"
   mov rdx, 0b11111111      ; all eight possibilities available
   mov r8, 0x000000000000 ; no squares under attack from anywhere
   movq xmm1, r8            ; maintain this state in xmm1
@@ -50,11 +46,6 @@ win:
   inc r8                   ; increment solution counter
   jmp next_state           ; keep going
 
-%ifidn __OUTPUT_FORMAT__,elf64
-  %define SYSCALL_EXIT 60
-%elifidn __OUTPUT_FORMAT__,macho64
-  %define SYSCALL_EXIT  0x2000001
-%endif
 done:
   mov rdi, r8
   mov rax, SYSCALL_EXIT
