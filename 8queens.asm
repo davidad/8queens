@@ -5,7 +5,7 @@
 %endif
   
 solve:
-  mov r10, 0b11111111      ; all eight possibilities available
+  mov r10, 0b00001111      ; only search half the solution space, for symmetry
   mov r8, 0x000000000000 ; no squares under attack from anywhere
   movq xmm1, r8            ; maintain this state in xmm1
   mov r15, 0x000100010001  ; attack mask for one queen (left, right, and center)
@@ -73,6 +73,7 @@ win:
   jmp next_state           ; keep going
 
 done:
+  shl r8, 1                ; multiply by two to account for symmetry
 %ifdef LOOPED
   dec rbx
   jnz solve
