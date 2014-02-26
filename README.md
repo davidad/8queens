@@ -12,7 +12,7 @@ and, assuming you have a recent version of `nasm` installed, simply run
 
 You should get a result like this:
 
-    gcc -O3 8q_C_bluecalm.c -o 8q_C_bluecalm
+    gcc -O3 -march=core2 -msse4.1 -msse4.2 8q_C_bluecalm.c -o 8q_C_bluecalm
     nasm 8q_x64_davidad.asm -DLOOPED=10000 -f macho64 -o 8q_x64_davidad.o
     ld -o 8q_x64_davidad 8q_x64_davidad.o
 
@@ -30,4 +30,4 @@ You should get a result like this:
     sys 	0m0.000s
     92
 
-
+bluecalm also suggests that you try replacing `-O3` with `-Ofast` if you have a version of gcc that supports it. (I don't yet.)
