@@ -1,4 +1,10 @@
 %include "os_dependent_stuff.asm"
+%ifdef LOOPED
+  %define NOPRETTY 1
+  mov rbx, LOOPED
+%endif
+  
+solve:
   mov r10, 0b11111111      ; all eight possibilities available
   mov r8, 0x000000000000 ; no squares under attack from anywhere
   movq xmm1, r8            ; maintain this state in xmm1
@@ -67,6 +73,10 @@ win:
   jmp next_state           ; keep going
 
 done:
+%ifdef LOOPED
+  dec rbx
+  jnz solve
+%endif
 %ifndef NOPRETTY
   mov rax, SYSCALL_WRITE
   mov rsi, cursormove2

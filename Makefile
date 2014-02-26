@@ -19,6 +19,10 @@ ifeq ($(NOPRETTY), 1)
   FLAGS += -DNOPRETTY
 endif
 
+ifeq ($(LOOPED), 1)
+  FLAGS += -DLOOPED=10000
+endif
+
 -include *.dep
 %.o: ./nasm %.asm
 	./nasm $*.asm $(FLAGS) -f $(FORMAT) -o $@ -MD $*.dep
