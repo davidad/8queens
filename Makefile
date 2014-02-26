@@ -4,7 +4,7 @@ test: 8q_C_bluecalm 8q_x64_davidad
 	time ./8q_x64_davidad ; echo $$?
 
 8q_C_bluecalm: 8q_C_bluecalm.c
-	gcc -O3 $^ -o $@
+	gcc -O3 -march=core2 -msse4.1 -msse4.2 $^ -o $@
 
 UNAME := $(shell uname)
 ifeq ($(UNAME),Darwin)
