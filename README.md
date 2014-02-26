@@ -1,6 +1,13 @@
 8queens
 =======
 
+**free-2x-speedup**: This version, inspired by a [Hacker News
+comment](https://news.ycombinator.com/item?id=7302741), only searches half the
+solution space, since it is a symmetric problem. This reduces the solution time
+to under 5μs.
+
+* * *
+
 x64 assembler solution to n-queens problem. Not tested for `n` other than 8.
 
 ```
