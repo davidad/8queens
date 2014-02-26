@@ -7,9 +7,10 @@ ifeq ($(UNAME),Linux)
 	FORMAT := elf64
 endif
 
-.PHONY: run
-run: 8queens
-	./8queens; echo $$?
+.PHONY: test
+test: 8queens
+	time ./8queens ; echo $$?
+	@echo "(looped 10,000 times)"
 
 8queens: 8queens.o
 	ld -o $@ $^
@@ -19,9 +20,7 @@ ifeq ($(NOPRETTY), 1)
   FLAGS += -DNOPRETTY
 endif
 
-ifeq ($(LOOPED), 1)
-  FLAGS += -DLOOPED=10000
-endif
+FLAGS += -DLOOPED=10000
 
 -include *.dep
 %.o: ./nasm %.asm
