@@ -4,7 +4,7 @@ After my [blog post](http://davidad.github.io/blog/2014/02/25/overkilling-the-8-
 
     $ git clone https://github.com/davidad/8queens.git
     $ cd 8queens
-    $ git checkout c_comparison
+    $ git checkout +c_comparison
 
 and, assuming you have a recent version of `nasm` installed, simply run 
 
